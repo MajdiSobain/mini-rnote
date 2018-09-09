@@ -8,8 +8,10 @@
 # Load the Form Designer 
 	Load "../formdesigner/formdesigner.ring"
 
+/* ****
 # Load the Web Server - ServerPrepare Class
 	Load "../libdepwin/Apache2.2/ring/prepare.ring"
+**** */
 
 # Load the Find in files application 
 	Load "../findinfiles/findinfilesController.ring"
@@ -36,6 +38,7 @@ Class RNoteController from WindowsControllerParent
 	lShowClassesList 	= True
 	lShowFormDesigner 	= True
 	nTabSpaces 		= 8
+/* ****
 	aBrowserLinks 		= [
 		["Local Help", "file:///"+exefolder() + "../docs/build/html/index.html"],
 		["Localhost","http://localhost"],
@@ -46,6 +49,7 @@ Class RNoteController from WindowsControllerParent
 		["Ring Resources","http://ring-lang.sourceforge.net/resources.html"],
 		["Ring Team","http://ring-lang.sourceforge.net/team.html"]
 	]
+**** */
 
 	# Define Colors
 		colordarkBlue   	= new qcolor() { setrgb(0,0,128,255) }
@@ -121,9 +125,11 @@ Class RNoteController from WindowsControllerParent
 
 	aFilesLines 	= []	# Used to remember the current line when we switch between many files
 
+/* *****
 	# For Auto-Complete
 	oAutoCompleteList 	= NULL
 	nAutoCompleteListSize 	= 0
+**** */
 
 	MyApp win1 oFilter aBtns tool1 menu1 status1
 	tool2 oTxtMainFile
@@ -134,8 +140,10 @@ Class RNoteController from WindowsControllerParent
 	oOutputWindow oProcessEditbox oProcessText oProcess
 	aFunctionsPos aClassesPos
 
+/* ****
 	oACTimer=NULL			# Auto-Complete Timer 
 	oCompleter=NULL 		# The completer object
+**** */
 
 	cFormFile = ""
 
@@ -151,7 +159,9 @@ Class RNoteController from WindowsControllerParent
 	MyApp = New qApp {
 		# Custom Editor Style Color
 		this.pCheckCustomColors()
+/* ****
 		this.PrepareAutoComplete()
+**** */
 		this.win1 = new qMainWindow() {
 			this.oFilter = new qAllEvents(this.win1)
 			this.oFilter.setCloseEvent(Method(:pRingNotepadXButton))
@@ -183,7 +193,7 @@ Class RNoteController from WindowsControllerParent
 						setclickEvent(Method(:pUndo))
 						settooltip("Undo (Ctrl+Z)")
 					} ,
-/*****
+/* ****
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/cut.png")
 						setclickEvent(Method(:pCut))
@@ -224,19 +234,19 @@ Class RNoteController from WindowsControllerParent
 						setclickEvent(Method(:pRun))
 						settooltip("Run the program (Ctrl+R) ")
 					} ,
-*****/
+**** */
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/rungui.png")
 						setclickEvent(Method(:pRunNoConsole))
 						settooltip("Run GUI Application - No Console (Ctrl+F5)")
 					} ,
-/*****
+/* ****
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/web.png")
 						setclickEvent(Method(:RunInBrowser))
 						settooltip("Run Web Application - Open In Browser (Ctrl+F6)")
 					} ,
-*****/
+**** */
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/close.png")
 						setclickEvent(Method(:pQuit))
@@ -248,7 +258,7 @@ Class RNoteController from WindowsControllerParent
 				for x in aBtns addwidget(x) addseparator() next
 			}
 
-/*****
+/* ****
 			# Main File Toolbar
 			tool2 = addtoolbar("mainfile")  {
 				oLblMainFile = new qLabel(this.win1) {
@@ -291,9 +301,9 @@ Class RNoteController from WindowsControllerParent
 				AddWidget(oBtnRunGUIMainFile)
 				AddWidget(oBtnRunWebMainFile)
 			}
-*****/
+**** */
 
-/*****
+/* ****
 		menu1 = new qmenubar(this.win1) {
 				subFile 	= addmenu("File")
 				subEdit 	= addmenu("Edit")
@@ -832,7 +842,7 @@ Class RNoteController from WindowsControllerParent
 				}
 			}
 			setmenubar(menu1)
-*****/
+**** */
 			this.status1 = new qstatusbar(this.win1) {
 				showmessage("Ready!",0)
 			}
@@ -841,7 +851,7 @@ Class RNoteController from WindowsControllerParent
 				setclickedEvent(Method(:pChangeFile))
 				setActivatedEvent(Method(:pChangeFile))
 				setGeometry(00,00,200,400)
-				setminimumwidth(250)
+// ###				setminimumwidth(250)
                 		chdir(this.cStartUpFolder)
 				oDir = new QDir()
 				this.ofile = new QFileSystemModel() {
@@ -875,11 +885,11 @@ Class RNoteController from WindowsControllerParent
 				setexpanded(myindex,true)
 				header().hide()
 				chdir(exefolder())
-/*****
+/* ****
 				if not ismacosx()
 					this.cWebsite = "file:///"+oDir.CurrentPath() + "/../docs/build/html/index.html"
 				ok
-*****/
+**** */
 			}
 			this.oDockProjectFiles = new qdockwidget(this.win1,0) {
 				setGeometry(00,00,200,200)
@@ -893,12 +903,14 @@ Class RNoteController from WindowsControllerParent
 				setLineNumbersAreaColor(this.aStyleColors[:LineNumbersAreaColor])
 				setLineNumbersAreaBackColor(this.aStyleColors[:LineNumbersAreaBackColor])
 			}
+/* ****
 			this.AutoComplete()
 			this.oACTimer = new qtimer(this.win1) {
 				setinterval(5000)
 				settimeoutevent(Method(:AutoCompleteTimer))
 				start()
 			}
+**** */
 			new RingCodeHighLighter(this.textedit1.document() ) {
 				if ismethod(self,:setkeywordsbold) 
 					setKeywordsbold(this.lKeywordsBold)
@@ -914,8 +926,9 @@ Class RNoteController from WindowsControllerParent
 			this.oDockSourceCode = new qdockwidget(this.win1,0) {
 				setwidget(this.textedit1)
 				setwindowtitle("Source Code")
-				setminimumwidth(340)                                                     
+// ###				setminimumwidth(340)                                                     
                         }
+/* ****
 			this.oWebBrowser = new qWidget() {
 				setstylesheet("color: black ; background-color: rgba(239,235,231,255);")
 				setWindowFlags(Qt_SubWindow)
@@ -953,6 +966,7 @@ Class RNoteController from WindowsControllerParent
 				setwidget(this.oWebBrowser)
 				setwindowtitle("Web Browser")
 			}
+**** */
 			# Functions List
 			this.aFunctionsPos = []	# Lines Numbers for each function
 			this.oFunctionsList = new qListwidget(this.win1) {
@@ -1010,22 +1024,25 @@ Class RNoteController from WindowsControllerParent
 				setwindowtitle("Form Designer")
 			}
 			this.pformdesignerdock()
-			adddockwidget(Qt_LeftDockWidgetArea,this.oDockProjectFiles,1)
-			adddockwidget(Qt_RightDockWidgetArea,this.oDockSourceCode,2)
-			adddockwidget(Qt_RightDockWidgetArea,this.oDockFunctionsList,1)
-			adddockwidget(Qt_RightDockWidgetArea,this.oDockClassesList,1)
-			adddockwidget(Qt_RightDockWidgetArea,this.oDockWebBrowser,1)
-			adddockwidget(Qt_BottomDockWidgetArea,this.oDockOutputWindow,1)
-			adddockwidget(Qt_RightDockWidgetArea,this.oDockFormDesigner,1)
+			adddockwidget(Qt_LeftDockWidgetArea,this.oDockSourceCode,2)
+			adddockwidget(Qt_LeftDockWidgetArea,this.oDockProjectFiles,2)
+			adddockwidget(Qt_LeftDockWidgetArea,this.oDockOutputWindow,2)
+			adddockwidget(Qt_LeftDockWidgetArea,this.oDockFormDesigner,2)
+			adddockwidget(Qt_LeftDockWidgetArea,this.oDockFunctionsList,2)
+			adddockwidget(Qt_LeftDockWidgetArea,this.oDockClassesList,2)
+/* ****
+			adddockwidget(Qt_LeftDockWidgetArea,this.oDockWebBrowser,1)
+**** */
 			this.win1 {
+				tabifydockwidget(this.oDockSourceCode,this.oDockProjectFiles)
+				tabifydockwidget(this.oDockProjectFiles,this.oDockOutputWindow)
+				tabifydockwidget(this.oDockOutputWindow,this.oDockFormDesigner)
+				tabifydockwidget(this.oDockFormDesigner,this.oDockFunctionsList)
 				tabifydockwidget(this.oDockFunctionsList,this.oDockClassesList)
-				tabifydockwidget(this.oDockFunctionsList,this.oDockOutputWindow)
-				tabifydockwidget(this.oDockSourceCode,this.oDockFormDesigner)
-				tabifydockwidget(this.oDockSourceCode,this.oDockWebBrowser)
 			}
 			setwinicon(self,this.cCurrentDir + "/image/notepad.png")
 			this.oDockSourceCode.raise()
-			this.oDockFunctionsList.raise()
+# ///		this.oDockFunctionsList.raise()
 		}
 		this {  
 			pSetMode(nDefaultMode) 
@@ -1043,12 +1060,14 @@ Class RNoteController from WindowsControllerParent
 		pSetFont()
 		pSetActiveLineColor()
 
+/* ****
 	func pWebGo
 		cWebsite = oWBText.text()
 		oWebView.LoadPage( new qurl( cWebSite ) )
 
 	func pWebBack
 		oWebView.Back()
+**** */
 
 	func pProject
 		oDockProjectFiles { if isvisible() hide() else Show() ok }
@@ -1056,8 +1075,10 @@ Class RNoteController from WindowsControllerParent
 	func pSourceCode
 		oDockSourceCode   { if isvisible() hide() else Show() ok }
 
+/* ****
 	func pWebBrowser
 		oDockWebBrowser	  { if isvisible() hide() else Show() ok }
+**** */
 
 	func pFunctionsList
 		oDockFunctionsList {
@@ -1137,7 +1158,9 @@ Class RNoteController from WindowsControllerParent
 		if nLine != NULL
 			gotoline(nLine)
 		ok
+/* ****
 		AutoComplete()
+**** */
 		lAsktoSave = False
 		cTextHash  = sha256(textedit1.toplaintext())
 		oDockFunctionsList.setWindowTitle("Functions (Loading...)")
@@ -1423,7 +1446,9 @@ Class RNoteController from WindowsControllerParent
 		StatusMessage("File : " + cActiveFileName + " saved!")
 		lAskToSave = false
 		cTextHash  = sha256(textedit1.toplaintext())
+/* ****
 		AutoComplete()
+**** */
 		displayFunctionsList()
 		displayClassesList()
 		# Save Active Form in the Form Designer
@@ -1530,7 +1555,9 @@ Class RNoteController from WindowsControllerParent
 	func pSetWindows
 		if not lShowProject  		oDockProjectFiles.close() else oDockProjectFiles.show() ok
 		if not lShowSourceCode  	oDockSourceCode.close() else oDockSourceCode.show() ok
+/* ****
 		if not lShowBrowser  		oDockWebBrowser.close() else oDockWebBrowser.show() ok
+**** */
 		if not lShowFunctionsList 	oDockFunctionsList.close() else oDockFunctionsList.show() ok
 		if not lShowClassesList 	oDockClassesList.close() else oDockClassesList.show() ok
 		if not lShowOutputWindow 	oDockOutputWindow.close() else oDockOutputWindow.show() ok
@@ -1621,7 +1648,9 @@ Class RNoteController from WindowsControllerParent
 				"cStartupFolder = '" + cStartupFolder + "'" + nl +
 				"lShowProject = " + oDockProjectFiles.isvisible() + nl +
 				"lShowSourceCode = " + oDockSourceCode.isvisible() + nl +
+/* ****
 				"lShowBrowser = " + oDockWebBrowser.isvisible() + nl +
+**** */
 				"lShowFunctionsList = " + oDockFunctionsList.isvisible() + nl +
 				"lShowClassesList = " + oDockClassesList.isvisible() + nl +
 				"lShowOutputWindow = " + oDockOutputWindow.isvisible() + nl +
@@ -1653,9 +1682,11 @@ Class RNoteController from WindowsControllerParent
 		ok
 		return true
 
+/* ****
 	func pSetWebsite
 		oWebView { loadpage(new qurl(this.cWebSite)) }
 		oWBText  { setText(this.cWebSite) }
+**** */
 
 	func LoadSettings
 		if fexists(cSettingsFile)
@@ -1665,7 +1696,9 @@ Class RNoteController from WindowsControllerParent
 	func RestoreSettings
 		pSetColors()
 		pSetFont()
+/* ****
 		pSetWebsite()
+**** */
 		pSetWindows()
 		pSetTabSpaces()
 		pSelectStyleColor2(nDefaultStyle)
@@ -1704,12 +1737,14 @@ Class RNoteController from WindowsControllerParent
 		textedit1.setTabStopWidth(nTabSpaces*nSpaceWidth)
 		oFontMetrics.Delete()
 
+/* ****
 	func pBrowserLink x
 		cLink = aBrowserLinks[x][2]
 		oWebView { loadpage(new qurl(cLink)) }
 		oWBText  { setText(cLink) }
 		oDockWebBrowser.Show()
 		oDockWebBrowser.raise()
+**** */
 
 	# Create a function to add Ring List to qStringList
 	func AddItems aList,oList
@@ -1717,6 +1752,7 @@ Class RNoteController from WindowsControllerParent
 			oList.Append(Item)
 		next
 
+/* ****
 	func PrepareAutoComplete
 		oAutoCompleteList = new qStringList()
 		# Add Ring Keywords
@@ -1815,6 +1851,7 @@ Class RNoteController from WindowsControllerParent
 		if isObject(oACTimer)
 			oACTimer.start()
 		ok
+***** */
 
 	func DisplayFunctionsList
 		oFunctionsList.clear()
@@ -1974,8 +2011,8 @@ Class RNoteController from WindowsControllerParent
 		RunTool(cAppFileName)
 
 	func pFormDesignerDock
-		cDir = CurrentDir()
-		chdir(exefolder() + "/../applications/formdesigner")
+		# /// cDir = CurrentDir()
+		# /// chdir(exefolder() + "/../applications/formdesigner")
 		# Import Classes 
 			import formdesigner 
 		open_windowAndLink(:FormDesignerController,self)
@@ -1987,7 +2024,7 @@ Class RNoteController from WindowsControllerParent
 		# It's used in another project!
 		FormDesigner().setParentObject(self)
 		oDockFormDesigner.setWidget(FormDesigner().oView.win)
-		chdir(cDir)
+		# /// chdir(cDir)
 
 	func GetActiveFolder
 		return cStartUpFolder
@@ -2391,6 +2428,7 @@ Class RNoteController from WindowsControllerParent
 
 	func pSetMode nMode
 		nDefaultMode = nMode
+/* ****
 		switch nMode
 			on VIEWMODE_GENERAL	
 				oDockProjectFiles.Show()
@@ -2501,15 +2539,19 @@ Class RNoteController from WindowsControllerParent
 					adddockwidget(Qt_RightDockWidgetArea,this.oDockOutputWindow,1)
 				}
 		off
+**** */
 
 	func ClearActiveFormFile
 		cFormFile = ""
 
+/* ****
 	func RunInBrowser
 		if cActiveFileName = Null return pNofileopened() ok
 		pSave()	
 		RunWebApplication(this.cActiveFileName)
+****/
 
+/* ****
 	func RunWebApplication cFile
 		if isWindows() 
 			if cWebApplicationFolder != JustFilePath(cFile)
@@ -2543,6 +2585,7 @@ Class RNoteController from WindowsControllerParent
 		if not fexists(cMainFileName) return ok
 		pSave()
 		RunWebApplication(cMainFileName)
+**** */
 
 	func OSTerminal
 		if isWindows()
@@ -2564,6 +2607,7 @@ Class RNoteController from WindowsControllerParent
 			OpenURL(new qURL("file:///"+this.cStartupFolder))
 		}
 
+/* ****
 	func pDistribute nOption
 		if cActiveFileName = Null return pNofileopened() ok
 		pSave()
@@ -2592,19 +2636,22 @@ Class RNoteController from WindowsControllerParent
 		oProcess = pRunProcess(cAppToRun,cPara,cpGetProcessData)
 		OSFilesManager()
 		chdir(exefolder())
+**** */
 
 	func pFindInFiles 
-		chdir(cCurrentDir+"../findinfiles")
+		# /// chdir(cCurrentDir+"../findinfiles")
 		open_WindowAndLink(:findinfilesController,self)
 		FindInFiles().setParentObject(self)
-		chdir(cCurrentDir)
+		# /// chdir(cCurrentDir)
 
 	func FindInFilesSelect cFile,nRow 
 		pCheckSaveBeforeChange()
 		cActiveFileName = cFile 
 		openFile(cFile)
-		GotoLine(nRow)		
+		GotoLine(nRow)
+/* ****		
 		AutoComplete()
+**** */
 		lAsktoSave = False
 		cTextHash  = sha256(textedit1.toplaintext())
 		oDockFunctionsList.setWindowTitle("Functions (Loading...)")
