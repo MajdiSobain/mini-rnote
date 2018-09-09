@@ -183,6 +183,7 @@ Class RNoteController from WindowsControllerParent
 						setclickEvent(Method(:pUndo))
 						settooltip("Undo (Ctrl+Z)")
 					} ,
+/*****
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/cut.png")
 						setclickEvent(Method(:pCut))
@@ -223,16 +224,19 @@ Class RNoteController from WindowsControllerParent
 						setclickEvent(Method(:pRun))
 						settooltip("Run the program (Ctrl+R) ")
 					} ,
+*****/
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/rungui.png")
 						setclickEvent(Method(:pRunNoConsole))
 						settooltip("Run GUI Application - No Console (Ctrl+F5)")
 					} ,
+/*****
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/web.png")
 						setclickEvent(Method(:RunInBrowser))
 						settooltip("Run Web Application - Open In Browser (Ctrl+F6)")
 					} ,
+*****/
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/close.png")
 						setclickEvent(Method(:pQuit))
@@ -244,6 +248,7 @@ Class RNoteController from WindowsControllerParent
 				for x in aBtns addwidget(x) addseparator() next
 			}
 
+/*****
 			# Main File Toolbar
 			tool2 = addtoolbar("mainfile")  {
 				oLblMainFile = new qLabel(this.win1) {
@@ -286,8 +291,10 @@ Class RNoteController from WindowsControllerParent
 				AddWidget(oBtnRunGUIMainFile)
 				AddWidget(oBtnRunWebMainFile)
 			}
+*****/
 
-			menu1 = new qmenubar(this.win1) {
+/*****
+		menu1 = new qmenubar(this.win1) {
 				subFile 	= addmenu("File")
 				subEdit 	= addmenu("Edit")
 				subView 	= addmenu("View")
@@ -825,6 +832,7 @@ Class RNoteController from WindowsControllerParent
 				}
 			}
 			setmenubar(menu1)
+*****/
 			this.status1 = new qstatusbar(this.win1) {
 				showmessage("Ready!",0)
 			}
@@ -867,9 +875,11 @@ Class RNoteController from WindowsControllerParent
 				setexpanded(myindex,true)
 				header().hide()
 				chdir(exefolder())
+/*****
 				if not ismacosx()
 					this.cWebsite = "file:///"+oDir.CurrentPath() + "/../docs/build/html/index.html"
 				ok
+*****/
 			}
 			this.oDockProjectFiles = new qdockwidget(this.win1,0) {
 				setGeometry(00,00,200,200)
