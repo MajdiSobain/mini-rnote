@@ -13,8 +13,10 @@
 	Load "../libdepwin/Apache2.2/ring/prepare.ring"
 **** */
 
+/* ****
 # Load the Find in files application 
 	Load "../findinfiles/findinfilesController.ring"
+**** */
 
 # Create the Ring Notepad Object
 	Open_WindowNoShow(:RNoteController)
@@ -30,13 +32,13 @@ Class RNoteController from WindowsControllerParent
 	cCurrentDir 		= CurrentDir() + "/"	# The Ring Notepad Folder
 	cStartUpFolder 		= exefolder() + "/../applications/"
 	cRingEXE 		= exefilename()
-	lShowProject 		= True
-	lShowSourceCode 	= True
-	lShowBrowser 		= True
-	lShowFunctionsList 	= True
-	lShowOutputWindow 	= True
-	lShowClassesList 	= True
-	lShowFormDesigner 	= True
+# ///	lShowProject 		= True
+# ///	lShowSourceCode 	= True
+# ///	lShowBrowser 		= True
+# ///	lShowFunctionsList 	= True
+# ///	lShowOutputWindow 	= True
+# ///	lShowClassesList 	= True
+# ///	lShowFormDesigner 	= True
 	nTabSpaces 		= 8
 /* ****
 	aBrowserLinks 		= [
@@ -1552,16 +1554,18 @@ Class RNoteController from WindowsControllerParent
 					aBackColor[1] + "," + aBackColor[2] + "," +
 					aBackColor[3] + ") }")
 
+/* ****
 	func pSetWindows
 		if not lShowProject  		oDockProjectFiles.close() else oDockProjectFiles.show() ok
 		if not lShowSourceCode  	oDockSourceCode.close() else oDockSourceCode.show() ok
 /* ****
 		if not lShowBrowser  		oDockWebBrowser.close() else oDockWebBrowser.show() ok
-**** */
+**** * /
 		if not lShowFunctionsList 	oDockFunctionsList.close() else oDockFunctionsList.show() ok
 		if not lShowClassesList 	oDockClassesList.close() else oDockClassesList.show() ok
 		if not lShowOutputWindow 	oDockOutputWindow.close() else oDockOutputWindow.show() ok
 		if not lShowFormDesigner 	oDockFormDesigner.close() else oDockFormDesigner.show() ok
+**** */
 
 	func pOpen
 		new qfiledialog(this.win1) {
@@ -1646,15 +1650,17 @@ Class RNoteController from WindowsControllerParent
 				"cFont = '" + cFont + "'" + nl +
 				"cWebSite = '" + cWebsite + "'" + nl +
 				"cStartupFolder = '" + cStartupFolder + "'" + nl +
+/* ****
 				"lShowProject = " + oDockProjectFiles.isvisible() + nl +
 				"lShowSourceCode = " + oDockSourceCode.isvisible() + nl +
 /* ****
 				"lShowBrowser = " + oDockWebBrowser.isvisible() + nl +
-**** */
+**** * /
 				"lShowFunctionsList = " + oDockFunctionsList.isvisible() + nl +
 				"lShowClassesList = " + oDockClassesList.isvisible() + nl +
 				"lShowOutputWindow = " + oDockOutputWindow.isvisible() + nl +
 				"lShowFormDesigner = " + oDockFormDesigner.isvisible() + nl +
+**** */
 				"nTabSpaces = " + nTabSpaces + nl +
 				"nDefaultStyle = " + nDefaultStyle + nl +
 				"nDefaultMode  = " + nDefaultMode + nl
@@ -1699,7 +1705,9 @@ Class RNoteController from WindowsControllerParent
 /* ****
 		pSetWebsite()
 **** */
+/* ****
 		pSetWindows()
+**** */
 		pSetTabSpaces()
 		pSelectStyleColor2(nDefaultStyle)
 
@@ -2638,6 +2646,7 @@ Class RNoteController from WindowsControllerParent
 		chdir(exefolder())
 **** */
 
+/* ****
 	func pFindInFiles 
 		# /// chdir(cCurrentDir+"../findinfiles")
 		open_WindowAndLink(:findinfilesController,self)
@@ -2651,10 +2660,11 @@ Class RNoteController from WindowsControllerParent
 		GotoLine(nRow)
 /* ****		
 		AutoComplete()
-**** */
+**** * /
 		lAsktoSave = False
 		cTextHash  = sha256(textedit1.toplaintext())
 		oDockFunctionsList.setWindowTitle("Functions (Loading...)")
 		oDockClassesList.setWindowTitle("Classes (Loading...)")
 		DisplayFunctionsList()
 		DisplayClassesList()
+**** */
