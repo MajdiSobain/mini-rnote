@@ -3,7 +3,7 @@
 
 # Load Standard Libraries
 	Load "guilib.ring"
-	Load "stdlib.ring"
+//	Load "stdlib.ring"
 
 # Load the Form Designer 
 	Load "../formdesigner/formdesigner.ring"
