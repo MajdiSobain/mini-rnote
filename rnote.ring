@@ -114,7 +114,9 @@ Class RNoteController from WindowsControllerParent
 
 
 	cSettingsFile 	= cCurrentDir + "ringnotepad.ini"
+/* ****
 	LoadSettings()
+**** */
 
 	oSearch 	= NULL
 	oSearchValue 	= NULL
@@ -1704,6 +1706,7 @@ Class RNoteController from WindowsControllerParent
 		write(cSettingsFile,cSettings)
 
 	func pSaveSettings
+		return 	# To prevent save settings
 		pSaveSettingsToFile()
 		if lAsktoSave and cTextHash != sha256(textedit1.toplaintext())
 			new qmessagebox(win1)
@@ -2076,7 +2079,9 @@ Class RNoteController from WindowsControllerParent
 	func pCheckCustomColors
 		if True	# Switch to Use the Style or Not
 			pSelectStyleColor(nDefaultStyle)
+/* ****
 			LoadSettings()
+**** */
 		ok
 
 	func pSetStyleColor(nStyle)
