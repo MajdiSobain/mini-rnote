@@ -1005,7 +1005,7 @@ Class RNoteController from WindowsControllerParent
 			# Functions List
 			this.aFunctionsPos = []	# Lines Numbers for each function
 			this.oFunctionsList = new qListwidget(this.win1) {
-				setitemdoubleclickedEvent(Method(:pSelectFunction))
+//				setitemdoubleclickedEvent(Method(:pSelectFunction))
 				setitemactivatedEvent(Method(:pSelectFunction))
 			}
 			this.oDockFunctionsList = new qDockwidget(this.win1,0) {
@@ -1016,7 +1016,7 @@ Class RNoteController from WindowsControllerParent
 			# Classes List
 			this.aClassesPos = []	# Lines Numbers for each class
 			this.oClassesList = new qListwidget(this.win1) {
-				setitemdoubleclickedEvent(Method(:pSelectClass))
+//				setitemdoubleclickedEvent(Method(:pSelectClass))
 				setitemactivatedEvent(Method(:pSelectClass))
 			}
 			this.oDockClassesList = new qDockwidget(this.win1,0) {
@@ -1914,13 +1914,13 @@ Class RNoteController from WindowsControllerParent
 		oFunctionsList.clear()
 		if oDockFunctionsList.isvisible() = false return ok
 		aFunctionsPos = []	# Lines numbers for each function
-		if cActiveFileName = NULL return ok
+//		if cActiveFileName = NULL return ok
 		cTempActiveFile = cActiveFileName
 		# Set the font
 			oTempFont.fromstring(cFont)
 			oFunctionsList.setFont(oTempFont)
 		StatusMessage("Creating functions list ... Please Wait!")
-		aFileContent = str2list(read(cActiveFileName))
+		aFileContent = str2list(textedit1.toplaintext())  # read(cActiveFileName))
 		nLineNumber = 0
 		for cLine in aFileContent
 			nLineNumber++
@@ -1960,13 +1960,13 @@ Class RNoteController from WindowsControllerParent
 		oClassesList.clear()
 		if oDockClassesList.isvisible() = false return ok
 		aClassesPos = []	# Lines numbers for each class
-		if cActiveFileName = NULL return ok
+//		if cActiveFileName = NULL return ok
 		cTempActiveFile = cActiveFileName
 		# Set the font
 			oTempFont.fromstring(cFont)
 			oClassesList.setFont(oTempFont)
 		StatusMessage("Creating Classes list ... Please Wait!")
-		aFileContent = str2list(read(cActiveFileName))
+		aFileContent = str2list(textedit1.toplaintext())  # read(cActiveFileName))
 		nLineNumber = 0
 		for cLine in aFileContent
 			nLineNumber++
@@ -2750,5 +2750,11 @@ Class RNoteController from WindowsControllerParent
 		else
 			tool1.show()
 			tool2.show()
+		ok
+		if not oDockFunctionsList.visibleRegion().isEmpty()
+			DisplayFunctionsList()
+		ok
+		if not oDockClassesList.visibleRegion().isEmpty()
+			DisplayClassesList()
 		ok
 
