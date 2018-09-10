@@ -21,12 +21,14 @@
 # Create the Ring Notepad Object
 	Open_WindowNoShow(:RNoteController)
 
+
 Class RNoteController from WindowsControllerParent 
 
 	cActiveFileName 	= ""
+	cMainFileName	= ""
 	aTextColor 		= [0,0,0]
 	aBackColor 		= [255,255,255]
-	cFont 			= 'Consolas,16,-1,5,50,0,0,0,0,0'
+	cFont 			= 'Consolas,11,-1,5,50,0,0,0,0,0'
 	oTempFont 		= new qfont("",0,0,0)
 /* ****
 	cWebsite 		= "http://www.ring-lang.sf.net/doc/index.html"
@@ -42,6 +44,7 @@ Class RNoteController from WindowsControllerParent
 # ///	lShowClassesList 	= True
 # ///	lShowFormDesigner 	= True
 	nTabSpaces 		= 8
+	MainFileEnabled 	= 0
 /* ****
 	aBrowserLinks 		= [
 		["Local Help", "file:///"+exefolder() + "../docs/build/html/index.html"],
@@ -96,7 +99,7 @@ Class RNoteController from WindowsControllerParent
 		STYLECOLOR_ART2		 		= 12
 		STYLECOLOR_ART3		 		= 13
 		STYLECOLOR_IMAGE	 		= 14
-		nDefaultStyle  				= STYLECOLOR_MODERN
+		nDefaultStyle  				= STYLECOLOR_MODERNBLACK2
 		lKeywordsBold 				= True
 	# Default Mode
 		VIEWMODE_GENERAL 	= 1
@@ -136,13 +139,14 @@ Class RNoteController from WindowsControllerParent
 **** */
 
 	MyApp win1 oFilter aBtns tool1 menu1 status1
-	tool2 oTxtMainFile
+	tool2 oTxtMainFile 
 	Tree1 TextEdit1 oDockProjectFiles oDockSourceCode oDockWebBrowser 
 	oDockFunctionsList oDockOutputWindow oDockClassesList oDockFormDesigner
 	oWebBrowser oWebView  oWBText 
 	oFile oFunctionsList oClassesList
 	oOutputWindow oProcessEditbox oProcessText oProcess
 	aFunctionsPos aClassesPos
+
 
 /* ****
 	oACTimer=NULL			# Auto-Complete Timer 
@@ -171,58 +175,80 @@ Class RNoteController from WindowsControllerParent
 			this.oFilter.setCloseEvent(Method(:pRingNotepadXButton))
 			installEventFilter(this.oFilter)
 			setwindowtitle("Ring Notepad")
+
 			aBtns = [
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 1
 						setbtnimage(self,"image/new.png")
 						setclickEvent(Method(:pNew))
 						settooltip("New File (Ctrl+N)")
 					} ,
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 2
 						setbtnimage(self,"image/open.png")
 						setclickEvent(Method(:pOpen))
 						settooltip("Open File (Ctrl+O)")
 					} ,
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 3
 						setbtnimage(self,"image/save.png")
 						setclickEvent(Method(:pSave))
 						settooltip("Save (Ctrl+S)")
 					 } ,
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 4
 						setbtnimage(self,"image/saveas.png")
 						setclickEvent(Method(:pSaveAs))
 						settooltip("Save As (Ctrl+E)")
 					 } ,
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 5
+						setbtnimage(self,"image/rungui.png")
+						setclickEvent(Method(:pRunNoConsole))
+						settooltip("Run GUI Application - No Console (Ctrl+F5)")
+					} ,
+					new qtoolbutton(this.win1) { # 6
+						setbtnimage(self,"image/mainfile.png")
+						setclickEvent(Method(:pSetMainFile))
+						settooltip("Set Main File")
+					} ,
+					new qtoolbutton(this.win1) { # 7
+						setbtnimage(self,"image/close.png")
+						setclickEvent(Method(:pQuit))
+						settooltip("Quit (Ctrl+Q)")
+					} ,
+					new qtoolbutton(this.win1) { # 8
 						setbtnimage(self,"image/undo.png")
 						setclickEvent(Method(:pUndo))
 						settooltip("Undo (Ctrl+Z)")
 					} ,
-/* ****
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 9
+						setbtnimage(self,"image/redo.png")
+						setclickEvent(Method(:pRedo))
+						settooltip("Redo (Ctrl+Z)")
+					} ,
+					new qtoolbutton(this.win1) { # 10
 						setbtnimage(self,"image/cut.png")
 						setclickEvent(Method(:pCut))
 						settooltip("Cut (Ctrl+X)")
 					 } ,
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 11
 						setbtnimage(self,"image/copy.png")
 						setclickEvent(Method(:pCopy))
 						settooltip("Copy (Ctrl+C)")
 					} ,
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 12
 						setbtnimage(self,"image/paste.png")
 						setclickEvent(Method(:pPaste))
 						settooltip("Paste (Ctrl+V)")
 					} ,
-					new qtoolbutton(this.win1) {
-						setbtnimage(self,"image/font.png")
-						setclickEvent(Method(:pFont))
-						settooltip("Font (Ctrl+I)")
-					} ,
-					new qtoolbutton(this.win1) {
+					new qtoolbutton(this.win1) { # 13
 						setbtnimage(self,"image/search.png")
 						setclickEvent(Method(:pFind))
 						settooltip("Find and Replace (Ctrl+F)")
 					} ,
+					new qtoolbutton(this.win1) { # 14
+						setbtnimage(self,"image/font.png")
+						setclickEvent(Method(:pFont))
+						settooltip("Font (Ctrl+I)")
+					} 
+
+/* ****
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/print.png")
 						setclickEvent(Method(:pPrint))
@@ -239,11 +265,7 @@ Class RNoteController from WindowsControllerParent
 						settooltip("Run the program (Ctrl+R) ")
 					} ,
 **** */
-					new qtoolbutton(this.win1) {
-						setbtnimage(self,"image/rungui.png")
-						setclickEvent(Method(:pRunNoConsole))
-						settooltip("Run GUI Application - No Console (Ctrl+F5)")
-					} ,
+
 /* ****
 					new qtoolbutton(this.win1) {
 						setbtnimage(self,"image/web.png")
@@ -251,17 +273,22 @@ Class RNoteController from WindowsControllerParent
 						settooltip("Run Web Application - Open In Browser (Ctrl+F6)")
 					} ,
 **** */
-					new qtoolbutton(this.win1) {
-						setbtnimage(self,"image/close.png")
-						setclickEvent(Method(:pQuit))
-						settooltip("Quit (Ctrl+Q)")
-					}
 				]
 
-			tool1 = addtoolbar("files")  {
-				for x in aBtns addwidget(x) addseparator() next
+			this.tool1 = addtoolbar("Files")  {
+				for x = 1 to 7
+					aBtns[x] = addwidget(aBtns[x])
+					addseparator() 
+				next
 			}
-
+			addToolBarBreak(4)  # 4 = Qt::TopToolBarArea
+			this.tool2 = addtoolbar("Edit")  {
+				for x = 8 to 14
+					aBtns[x] = addwidget(aBtns[x])
+					addseparator() 
+				next
+			}
+			this.aBtns = aBtns
 /* ****
 			# Main File Toolbar
 			tool2 = addtoolbar("mainfile")  {
@@ -1476,6 +1503,7 @@ Class RNoteController from WindowsControllerParent
 			ok
 		}
 
+/* ****
 	func pPrint
 		StatusMessage("Printing to File : RingDoc.pdf")
 		printer1 = new qPrinter(0) {
@@ -1487,11 +1515,15 @@ Class RNoteController from WindowsControllerParent
 		new QDesktopServices {
 			OpenURL(new qURL("file:///"+substr(this.cCurrentDir,"\","/")+"RingDoc.pdf")) 
 		}
-
+**** */
 
 	func pUndo
 		textedit1.undo()
 		StatusMessage("Undo!")
+
+	func pRedo
+		textedit1.redo()
+		StatusMessage("Redo!")
 
 	func pCut
 		textedit1.cut()
@@ -1650,7 +1682,9 @@ Class RNoteController from WindowsControllerParent
 		cSettings = "aTextColor = ["+aTextColor[1]+","+aTextColor[2]+","+aTextColor[3]+"]" + nl +
 				"aBackColor = ["+aBackColor[1]+","+aBackColor[2]+","+aBackColor[3]+"]" + nl +
 				"cFont = '" + cFont + "'" + nl +
+/* ****
 				"cWebSite = '" + cWebsite + "'" + nl +
+**** */
 				"cStartupFolder = '" + cStartupFolder + "'" + nl +
 /* ****
 				"lShowProject = " + oDockProjectFiles.isvisible() + nl +
@@ -2404,7 +2438,18 @@ Class RNoteController from WindowsControllerParent
 		oProcessEditbox.setPlainText("")
 
 	func pSetMainFile
-		oTxtMainFile.setText(cActiveFileName)
+		if MainFileEnabled
+			MainFileEnabled = 0
+			tool1.widgetforaction(aBtns[6]).setStyleSheet("Background-color: ;")
+		else
+			if cActiveFileName != NULL
+				MainFileEnabled = 1
+				cMainFileName = cActiveFileName
+				tool1.widgetforaction(aBtns[6]).setStyleSheet("Background-color: White;")
+			else
+				msgBox("No Opened File", "Open a file before make it main!")
+			ok
+		ok
 
 	func GetMainFile
 		cMainFileName = trim(oTxtMainFile.text())
