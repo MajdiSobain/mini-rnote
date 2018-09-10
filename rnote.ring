@@ -1445,6 +1445,7 @@ Class RNoteController from WindowsControllerParent
 			show()
 		}
 
+/* ****
 	func pDebug
 		if cActiveFileName = Null return pNofileopened() ok
 		pSave()
@@ -1482,6 +1483,7 @@ Class RNoteController from WindowsControllerParent
 		chdir(JustFilePath(cActiveFileName))
 		oProcess = pRunProcess(cRingEXE,cActiveFileName,cpGetProcessData)
 		chdir(exefolder())
+**** */
 
 	func pSave
 		if cActiveFileName = NULL return pSaveAs() ok
