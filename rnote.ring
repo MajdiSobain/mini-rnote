@@ -2470,7 +2470,7 @@ Class RNoteController from WindowsControllerParent
 				cMainFileName = cActiveFileName
 				tool1.widgetforaction(aBtns[6]).setStyleSheet("Background-color: White;")
 			else
-				msgBox("No Opened File", "Open a file before make it main!")
+				pNofileopened()
 			ok
 		ok
 
