@@ -1148,6 +1148,7 @@ Class RNoteController from WindowsControllerParent
 			ok	
 		}
 
+/* ****
 	func pFormDesignerWindow
 		oDockFormDesigner {
 			if isvisible()
@@ -1156,6 +1157,7 @@ Class RNoteController from WindowsControllerParent
 				Show()
 			ok
 		}
+**** */
 
 	func pCheckSaveBeforeChange
 		if cActiveFileName = NULL return ok
@@ -2030,9 +2032,11 @@ Class RNoteController from WindowsControllerParent
 		oProcessEditbox.insertplaintext(cText)
 		oProcessText.setText("")
 
+/* ****
 	func pFormDesigner		
 		cFormFileName = cCurrentDir + "../formdesigner/formdesigner.ring"
 		RunTool(cFormFileName)
+**** */
 
 	func RunTool cFileName
 		oProcessEditbox.setplaintext("")
@@ -2049,6 +2053,7 @@ Class RNoteController from WindowsControllerParent
 			system(cCode)
 		ok
 
+/* ****
 	func pREPLConsole
 		cAppFileName = cCurrentDir + "../ringrepl/repl.ring"
 		RunToolConsole(cAppFileName)
@@ -2062,10 +2067,13 @@ Class RNoteController from WindowsControllerParent
 			cAppFileName += ",2"	# Style Fusion Black
 		ok
 		RunTool(cAppFileName)
+**** */
 
 	func pFormDesignerDock
-		# /// cDir = CurrentDir()
-		# /// chdir(exefolder() + "/../applications/formdesigner")
+		if not isAndroid()
+			cDir = CurrentDir()
+			chdir(exefolder() + "/../applications/formdesigner")
+		ok
 		# Import Classes 
 			import formdesigner 
 		open_windowAndLink(:FormDesignerController,self)
@@ -2077,7 +2085,9 @@ Class RNoteController from WindowsControllerParent
 		# It's used in another project!
 		FormDesigner().setParentObject(self)
 		oDockFormDesigner.setWidget(FormDesigner().oView.win)
-		# /// chdir(cDir)
+		if not isAndroid()
+			chdir(cDir)
+		ok
 
 	func GetActiveFolder
 		return cStartUpFolder
@@ -2653,6 +2663,7 @@ Class RNoteController from WindowsControllerParent
 		RunWebApplication(cMainFileName)
 **** */
 
+/* ****
 	func OSTerminal
 		if isWindows()
 			cCommand = 'start cmd /K "cd ' + cStartupFolder + '"'
@@ -2672,6 +2683,7 @@ Class RNoteController from WindowsControllerParent
 		new QDesktopServices {
 			OpenURL(new qURL("file:///"+this.cStartupFolder))
 		}
+**** */
 
 /* ****
 	func pDistribute nOption
