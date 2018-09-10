@@ -928,6 +928,7 @@ Class RNoteController from WindowsControllerParent
 				setGeometry(00,00,200,200)
 				setwindowtitle("Project Files")
 				setwidget(this.tree1)
+				setvisibilityChangedEvent(Method(:pTabChanged))
 			}
 			this.textedit1 = new codeeditor(this.win1) {
 				setCursorPositionChangedEvent(Method(:pCursorPositionChanged))
@@ -959,7 +960,8 @@ Class RNoteController from WindowsControllerParent
 			this.oDockSourceCode = new qdockwidget(this.win1,0) {
 				setwidget(this.textedit1)
 				setwindowtitle("Source Code")
-// ###				setminimumwidth(340)                                                     
+// ###				setminimumwidth(340)    
+				setvisibilityChangedEvent(Method(:pTabChanged))                                                 
                         }
 /* ****
 			this.oWebBrowser = new qWidget() {
@@ -1009,6 +1011,7 @@ Class RNoteController from WindowsControllerParent
 			this.oDockFunctionsList = new qDockwidget(this.win1,0) {
 				setWidget(this.oFunctionsList)
 				setwindowtitle("Functions")
+				setvisibilityChangedEvent(Method(:pTabChanged))
 			}
 			# Classes List
 			this.aClassesPos = []	# Lines Numbers for each class
@@ -1019,6 +1022,7 @@ Class RNoteController from WindowsControllerParent
 			this.oDockClassesList = new qDockwidget(this.win1,0) {
 				setWidget(this.oClassesList)
 				setwindowtitle("Classes")
+				setvisibilityChangedEvent(Method(:pTabChanged))
 			}
 			# Output Window
 			this.oProcess = NULL
@@ -1052,9 +1056,11 @@ Class RNoteController from WindowsControllerParent
 			this.oDockOutputWindow = new qDockWidget(this.win1,0) {
 				setwidget( this.oOutputWindow )
 				setwindowtitle("Output")
+				setvisibilityChangedEvent(Method(:pTabChanged))
 			}
 			this.oDockFormDesigner = new qDockwidget(this.win1,0) {
 				setwindowtitle("Form Designer")
+				setvisibilityChangedEvent(Method(:pTabChanged))
 			}
 			this.pformdesignerdock()
 			adddockwidget(Qt_LeftDockWidgetArea,this.oDockSourceCode,2)
@@ -2720,3 +2726,12 @@ Class RNoteController from WindowsControllerParent
 		DisplayFunctionsList()
 		DisplayClassesList()
 **** */
+
+	func pTabChanged
+		if not oDockFormDesigner.visibleRegion().isEmpty()
+			tool1.hide()
+			tool2.hide()
+		else
+			tool1.show()
+			tool2.show()
+		ok
