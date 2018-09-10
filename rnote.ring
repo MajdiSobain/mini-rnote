@@ -2472,6 +2472,7 @@ Class RNoteController from WindowsControllerParent
 			ok
 		ok
 
+/* ****
 	func GetMainFile
 		cMainFileName = trim(oTxtMainFile.text())
 		if cMainFileName = NULL 
@@ -2501,6 +2502,7 @@ Class RNoteController from WindowsControllerParent
 		oDockOutputWindow { show() raise() }		
 		pSave()
 		pRunGUIOperation(cMainFileName)
+**** */
 
 	func pSetMode nMode
 		nDefaultMode = nMode
