@@ -1119,6 +1119,7 @@ Class RNoteController from WindowsControllerParent
 		oDockWebBrowser	  { if isvisible() hide() else Show() ok }
 **** */
 
+/* ****
 	func pFunctionsList
 		oDockFunctionsList {
 			if isvisible()
@@ -1147,6 +1148,7 @@ Class RNoteController from WindowsControllerParent
 				Show()
 			ok	
 		}
+**** */
 
 /* ****
 	func pFormDesignerWindow
@@ -2749,3 +2751,4 @@ Class RNoteController from WindowsControllerParent
 			tool1.show()
 			tool2.show()
 		ok
+
