@@ -63,6 +63,8 @@
         <file>image/print.png</file>
         <file>image/open.png</file>
         <file>image/debug.png</file>
+        <file>image/redo.png</file>
+        <file>image/mainfile.png</file>
         <file>ring</file>
     </qresource>
 </RCC>
