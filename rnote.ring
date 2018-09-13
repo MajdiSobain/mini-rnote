@@ -21,7 +21,6 @@
 # Create the Ring Notepad Object
 	Open_WindowNoShow(:RNoteController)
 
-
 Class RNoteController from WindowsControllerParent 
 
 	cActiveFileName 	= ""
@@ -33,9 +32,16 @@ Class RNoteController from WindowsControllerParent
 /* ****
 	cWebsite 		= "http://www.ring-lang.sf.net/doc/index.html"
 **** */
+if isAndroid()
+	oSP = new QStandardPaths
+	cCurrentDir 	= oSP.standardLocations(8 /* QStandardPaths::HomeLocation */).value(0)
+	cStartUpFolder 	= oSP.standardLocations(11 /* QStandardPaths::GenericDataLocation */).value(0) //+ "/minirnote/"
+else
 	cCurrentDir 		= CurrentDir() + "/"	# The Ring Notepad Folder
 	cStartUpFolder 	= exefolder() + "/../applications/"
+ok
 	cRingEXE 		= exefilename()
+
 # ///	lShowProject 		= True
 # ///	lShowSourceCode 	= True
 # ///	lShowBrowser 		= True
@@ -128,8 +134,7 @@ Class RNoteController from WindowsControllerParent
 	cReplaceText 	= ""
 
 	lAskToSave 	= false
-	cTextHash	= sha256("")
-
+# ///	cTextHash	= sha256("")
 	# Hash Table contains the File Name and the Line Number
 
 	aFilesLines 	= []	# Used to remember the current line when we switch between many files
@@ -180,72 +185,72 @@ Class RNoteController from WindowsControllerParent
 
 			aBtns = [
 					new qtoolbutton(this.win1) { # 1
-						setbtnimage(self,"image/new.png")
+						setbtnimage(self, AppFile("image/new.png"))
 						setclickEvent(Method(:pNew))
 						settooltip("New File (Ctrl+N)")
 					} ,
 					new qtoolbutton(this.win1) { # 2
-						setbtnimage(self,"image/open.png")
+						setbtnimage(self, AppFile("image/open.png"))
 						setclickEvent(Method(:pOpen))
 						settooltip("Open File (Ctrl+O)")
 					} ,
 					new qtoolbutton(this.win1) { # 3
-						setbtnimage(self,"image/save.png")
+						setbtnimage(self, AppFile("image/save.png"))
 						setclickEvent(Method(:pSave))
 						settooltip("Save (Ctrl+S)")
 					 } ,
 					new qtoolbutton(this.win1) { # 4
-						setbtnimage(self,"image/saveas.png")
+						setbtnimage(self, AppFile("image/saveas.png"))
 						setclickEvent(Method(:pSaveAs))
 						settooltip("Save As (Ctrl+E)")
 					 } ,
 					new qtoolbutton(this.win1) { # 5
-						setbtnimage(self,"image/rungui.png")
-						setclickEvent(Method(:pRunNoConsole))
+						setbtnimage(self, AppFile("image/rungui.png"))
+						setclickEvent(Method(:pRun))
 						settooltip("Run GUI Application - No Console (Ctrl+F5)")
 					} ,
 					new qtoolbutton(this.win1) { # 6
-						setbtnimage(self,"image/mainfile.png")
+						setbtnimage(self, AppFile("image/mainfile.png"))
 						setclickEvent(Method(:pSetMainFile))
 						settooltip("Set Main File")
 					} ,
 					new qtoolbutton(this.win1) { # 7
-						setbtnimage(self,"image/close.png")
+						setbtnimage(self, AppFile("image/close.png"))
 						setclickEvent(Method(:pQuit))
 						settooltip("Quit (Ctrl+Q)")
 					} ,
 					new qtoolbutton(this.win1) { # 8
-						setbtnimage(self,"image/undo.png")
+						setbtnimage(self, AppFile("image/undo.png"))
 						setclickEvent(Method(:pUndo))
 						settooltip("Undo (Ctrl+Z)")
 					} ,
 					new qtoolbutton(this.win1) { # 9
-						setbtnimage(self,"image/redo.png")
+						setbtnimage(self, AppFile("image/redo.png"))
 						setclickEvent(Method(:pRedo))
 						settooltip("Redo (Ctrl+Z)")
 					} ,
 					new qtoolbutton(this.win1) { # 10
-						setbtnimage(self,"image/cut.png")
+						setbtnimage(self, AppFile("image/cut.png"))
 						setclickEvent(Method(:pCut))
 						settooltip("Cut (Ctrl+X)")
 					 } ,
 					new qtoolbutton(this.win1) { # 11
-						setbtnimage(self,"image/copy.png")
+						setbtnimage(self, AppFile("image/copy.png"))
 						setclickEvent(Method(:pCopy))
 						settooltip("Copy (Ctrl+C)")
 					} ,
 					new qtoolbutton(this.win1) { # 12
-						setbtnimage(self,"image/paste.png")
+						setbtnimage(self, AppFile("image/paste.png"))
 						setclickEvent(Method(:pPaste))
 						settooltip("Paste (Ctrl+V)")
 					} ,
 					new qtoolbutton(this.win1) { # 13
-						setbtnimage(self,"image/search.png")
+						setbtnimage(self, AppFile("image/search.png"))
 						setclickEvent(Method(:pFind))
 						settooltip("Find and Replace (Ctrl+F)")
 					} ,
 					new qtoolbutton(this.win1) { # 14
-						setbtnimage(self,"image/font.png")
+						setbtnimage(self, AppFile("image/font.png"))
 						setclickEvent(Method(:pFont))
 						settooltip("Font (Ctrl+I)")
 					} 
@@ -291,6 +296,7 @@ Class RNoteController from WindowsControllerParent
 				next
 			}
 			this.aBtns = aBtns
+
 /* ****
 			# Main File Toolbar
 			tool2 = addtoolbar("mainfile")  {
@@ -885,7 +891,9 @@ Class RNoteController from WindowsControllerParent
 				setActivatedEvent(Method(:pChangeFile))
 				setGeometry(00,00,200,400)
 // ###				setminimumwidth(250)
-                		chdir(this.cStartUpFolder)
+				if not isAndroid()
+                	chdir(this.cStartUpFolder)
+				ok
 				oDir = new QDir()
 				this.ofile = new QFileSystemModel() {
 					setrootpath(oDir.currentpath())
@@ -917,7 +925,9 @@ Class RNoteController from WindowsControllerParent
 				setcurrentindex(myindex)
 				setexpanded(myindex,true)
 				header().hide()
-				chdir(exefolder())
+				if not isAndroid()
+					chdir(exefolder())
+				ok
 /* ****
 				if not ismacosx()
 					this.cWebsite = "file:///"+oDir.CurrentPath() + "/../docs/build/html/index.html"
@@ -1079,10 +1089,15 @@ Class RNoteController from WindowsControllerParent
 				tabifydockwidget(this.oDockFormDesigner,this.oDockFunctionsList)
 				tabifydockwidget(this.oDockFunctionsList,this.oDockClassesList)
 			}
-			setwinicon(self,this.cCurrentDir + "/image/notepad.png")
+			if isAndroid()
+				setwinicon(self, AppFile("image/notepad.png"))
+			else
+				setwinicon(self,this.cCurrentDir + "/image/notepad.png")
+			ok
 			this.oDockSourceCode.raise()
 # ///		this.oDockFunctionsList.raise()
 		}
+
 		this {  
 			pSetMode(nDefaultMode) 
 			RestoreSettings()
@@ -1166,57 +1181,61 @@ Class RNoteController from WindowsControllerParent
 		pSaveSettings()
 
 	func pChangeFile
-		pCheckSaveBeforeChange()	# To ask to saving a file
-		pSaveCurrentFolder()
-		oItem = tree1.currentindex()
-		if ofile.isdir(oItem)
-			return
-		ok
-		# Open Form Designer File 
-		lActivateFormDesigner = False
-		if right(ofile.filepath(oItem),6) = ".rform"
-			StatusMessage("Open the form file...")
-			if ofile.filepath(oItem) != cFormFile 
-				cFormFile = ofile.filepath(oItem)
-				FormDesigner().OpenFile(ofile.filepath(oItem))
+		try
+			pCheckSaveBeforeChange()	# To ask to saving a file
+			pSaveCurrentFolder()
+			oItem = tree1.currentindex()
+			if ofile.isdir(oItem)
+				return
+			ok
+			# Open Form Designer File 
+			lActivateFormDesigner = False
+			if right(ofile.filepath(oItem),6) = ".rform"
+				StatusMessage("Open the form file...")
+				if ofile.filepath(oItem) != cFormFile 
+					cFormFile = ofile.filepath(oItem)
+					FormDesigner().OpenFile(ofile.filepath(oItem))
+				ok
+				StatusMessage("Ready!")
+				oDockFormDesigner.raise()
+				cSourceFile = substr(cFormFile,".rform","controller.ring")
+				if fexists(cSourceFile)
+					cActiveFileName = cSourceFile
+				else 
+					return 
+				ok
+				lActivateFormDesigner = True
+			else 
+				cActiveFileName = ofile.filepath(oItem)
+			ok
+			# We get nLine before using textedit1.settext() to get the value before aFilesLines update
+				nLine =  aFilesLines[cActiveFileName]
+			textedit1.setPlaintext(read(cActiveFileName))
+			textedit1.setfocus(0)
+			pCursorPositionChanged()
+			pSetActiveFileName()
+			if nLine != NULL
+				gotoline(nLine)
+			ok
+	/* ****
+			AutoComplete()
+	**** */
+			lAsktoSave = False
+# ///			cTextHash  = sha256(this.textedit1.toplaintext())
+			oDockFunctionsList.setWindowTitle("Functions (Loading...)")
+			oDockClassesList.setWindowTitle("Classes (Loading...)")
+			DisplayFunctionsList()
+			DisplayClassesList()
+			if lActivateFormDesigner
+				oDockFormDesigner.raise()
+			else 
+				oDockSourceCode.raise()
+				tree1.setFocus(0)
 			ok
 			StatusMessage("Ready!")
-			oDockFormDesigner.raise()
-			cSourceFile = substr(cFormFile,".rform","controller.ring")
-			if fexists(cSourceFile)
-				cActiveFileName = cSourceFile
-			else 
-				return 
-			ok
-			lActivateFormDesigner = True
-		else 
-			cActiveFileName = ofile.filepath(oItem)
-		ok
-		# We get nLine before using textedit1.settext() to get the value before aFilesLines update
-			nLine =  aFilesLines[cActiveFileName]
-		textedit1.setPlaintext(read(cActiveFileName))
-		textedit1.setfocus(0)
-		pCursorPositionChanged()
-		pSetActiveFileName()
-		if nLine != NULL
-			gotoline(nLine)
-		ok
-/* ****
-		AutoComplete()
-**** */
-		lAsktoSave = False
-		cTextHash  = sha256(textedit1.toplaintext())
-		oDockFunctionsList.setWindowTitle("Functions (Loading...)")
-		oDockClassesList.setWindowTitle("Classes (Loading...)")
-		DisplayFunctionsList()
-		DisplayClassesList()
-		if lActivateFormDesigner
-			oDockFormDesigner.raise()
-		else 
-			oDockSourceCode.raise()
-			tree1.setFocus(0)
-		ok
-		StatusMessage("Ready!")
+		catch 
+			msgbox("Error", cCatchError)
+		Done
 
 	func pSetActiveFileName
 		oDockSourceCode.setWindowTitle("Source Code : " + cActiveFileName)
@@ -1334,7 +1353,7 @@ Class RNoteController from WindowsControllerParent
 				AddLayout(oLayout4)
 			}
 			setLayout(oLayout5)
-			setwinicon(this.oSearch,"image/notepad.png")
+			setwinicon(this.oSearch, AppFile("image/notepad.png"))
 			setWindowTitle("Find/Replace")
 			setFixedsize(550,160)
 			setwindowflags(Qt_CustomizeWindowHint | Qt_WindowTitleHint | Qt_WindowStaysOnTopHint)
@@ -1484,13 +1503,54 @@ Class RNoteController from WindowsControllerParent
 		oProcess = pRunProcess(cRingEXE,cActiveFileName,cpGetProcessData)
 		chdir(exefolder())
 **** */
+	func pRun
+		try
+				if cActiveFileName = Null return pNofileopened() ok
+				pSave()
+
+				codefilepath = ""
+				if MainFileEnabled
+					codefilepath = cMainFileName
+				else
+					codefilepath = cActiveFileName
+				ok
+				if isAndroid()
+					oDockOutputWindow { show() raise() }
+					oProcessEditbox.setplaintext("")
+					qfl = new qfile()
+					preperm = 4000 | 1000 | 400 | 100 | 40 | 10
+					oSP = new qStandardPaths
+					if oSP.locate(8, "ring", 1/*Directory*/) = NULL
+						oqDir = new qDir()
+						oqDir.mkdir(cCurrentDir + "/ring")
+						qfl.copy_2(":/ring/ring", cCurrentDir + "/ring/ring")
+						qfl.setPermissions(cCurrentDir + "/ring/ring", preperm)
+						qfl.copy_2(":/ring/libring.so", cCurrentDir + "/ring/libring.so")
+						qfl.copy_2(":/ring/libring_openssl.so", cCurrentDir + "/ring/libring_openssl.so")
+						qfl.copy_2(":/ring/libring_libcurl.so", cCurrentDir + "/ring/libring_libcurl.so")
+						qfl.copy_2(":/ring/libringqt.so", cCurrentDir + "/ring/libringqt.so")
+					ok
+
+					exefile = cCurrentDir + "/ring/ring"
+					# Environment preparation will be done inside pRunProcess func
+					oProcess = pRunProcess(exefile,codefilepath,cpGetProcessData)
+				else
+					oDockOutputWindow { show() raise() }
+					oProcessEditbox.setplaintext("")
+					chdir(JustFilePath(cActiveFileName))
+					oProcess = pRunProcess(cRingEXE,codefilepath,cpGetProcessData)
+					chdir(exefolder())
+				ok	
+		catch 
+			msgbox("error", cCatchError)
+		done
 
 	func pSave
 		if cActiveFileName = NULL return pSaveAs() ok
 		writefile(cActiveFileName,textedit1.toplaintext())
 		StatusMessage("File : " + cActiveFileName + " saved!")
 		lAskToSave = false
-		cTextHash  = sha256(textedit1.toplaintext())
+# ///		cTextHash  = sha256(textedit1.toplaintext())
 /* ****
 		AutoComplete()
 **** */
@@ -1502,7 +1562,6 @@ Class RNoteController from WindowsControllerParent
 			ok
 			StatusMessage("Ready!")
 
-
 	func pSaveAs
 		new qfiledialog(win1) {
 			this.pSaveCurrentFolder()
@@ -1513,7 +1572,7 @@ Class RNoteController from WindowsControllerParent
 				this.StatusMessage("File : " + this.cActiveFileName + " saved!")
 				this.pSetActiveFileName()
 				lAskToSave = false
-				cTextHash  = sha256(this.textedit1.toplaintext())
+# ///				cTextHash  = sha256(this.textedit1.toplaintext())
 			ok
 		}
 
@@ -1655,7 +1714,11 @@ Class RNoteController from WindowsControllerParent
 		win = new qMessagebox(win1) {
 			setwindowtitle(cTitle)
 			setText(cMessage)
-			setwinicon(win,this.cCurrentDir + "/image/notepad.png")
+			if isAndroid()
+				setwinicon(win, AppFile("image/notepad.png"))
+			else
+				setwinicon(win,this.cCurrentDir + "/image/notepad.png")
+			ok
 			show()
 		}
 
@@ -1720,7 +1783,7 @@ Class RNoteController from WindowsControllerParent
 	func pSaveSettings
 		return 	# To prevent save settings
 		pSaveSettingsToFile()
-		if lAsktoSave and cTextHash != sha256(textedit1.toplaintext())
+		if lAsktoSave # /// and cTextHash != sha256(textedit1.toplaintext())
 			new qmessagebox(win1)
 			{
 				setwindowtitle("Save Changes?")
@@ -2013,9 +2076,18 @@ Class RNoteController from WindowsControllerParent
 				append(cPara)
 			next
 		}
+#		if isAndroid()
+#			oProcessEnv = new qProcessEnvironment() {
+#				environmentPaths = cCurrentDir + ":" + substr(cCurrentDir, "files", "lib")
+#				oProcessEnv.insert("LD_LIBRARY_PATH", environmentPaths)
+#			}
+#		ok
 		oProcess = new qprocess(NULL) {
 			setprogram( cProgram)
 			setarguments(ostringlist)
+#			if isAndroid()
+#				setProcessEnvironment(oProcessEnv)
+#			ok
 			setreadyreadstandardoutputevent(cGetDataFunc)
 			start_3(  QIODevice_ReadWrite )
 		}
@@ -2074,6 +2146,7 @@ Class RNoteController from WindowsControllerParent
 **** */
 
 	func pFormDesignerDock
+
 		if not isAndroid()
 			cDir = CurrentDir()
 			chdir(exefolder() + "/../applications/formdesigner")
@@ -2450,7 +2523,11 @@ Class RNoteController from WindowsControllerParent
 
 	func pStyleImage_AfterControls
 		# Called After we have all of the Ring Notepad Window Controls
-		cBackImage = cCurrentDir + "image/back.jpg"
+		if isAndroid()
+			cBackImage = AppFile("image/back.jpg")
+		else
+			cBackImage = cCurrentDir + "image/back.jpg"
+		ok
 		cBackImage = substr(cBackImage,"\","/")
 		for oObj in [this.tree1,this.oFunctionsList,this.oClassesList,this.oOutputWindow] 
 			oObj {
@@ -2465,6 +2542,7 @@ Class RNoteController from WindowsControllerParent
 	func pSetMainFile
 		if MainFileEnabled
 			MainFileEnabled = 0
+			cMainFileName = ""
 			tool1.widgetforaction(aBtns[6]).setStyleSheet("Background-color: ;")
 		else
 			if cActiveFileName != NULL
@@ -2753,6 +2831,7 @@ Class RNoteController from WindowsControllerParent
 			tool1.show()
 			tool2.show()
 		ok
+
 		if not oDockFunctionsList.visibleRegion().isEmpty()
 			DisplayFunctionsList()
 		ok
