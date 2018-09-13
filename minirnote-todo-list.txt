@@ -1,0 +1,29 @@
+To do list for mini rnote IDE for android
+============================================
+
+- re enable settings file taking care of paths
+- adding icon or menu to edit minirnote settings
+- # taking care of main paths of the rnote
+- changing the rnote name in the window title and the file name
+- comment out RunTool and RunToolConsole funcs and other unused funcs
+- delete all/unNecessary commented code
+- make icons large
+- add ring bins folder to the project.qrc file
+- resize font of line numbers panel
+- redesigning the interface for better look
+
+
+Main Problems that I faced:
+-----------------------------------------
+- Compiling ringqt for android to be loaded by android specific Ring binaries.
+	== SegFault Error msg when loading compiled libringqt.so by ring from within android emulator.
+	Working evnvironment: 
+		- Computer: Ubuntu 18.04 64bit + Qt 5.11.0 + QtCreator 4.6.1
+		- Android: api=21 arch=arm
+
+
+Minor tweeks that need to be implemented:
+----------------------------------
+- Put ring and its libraries in the /data/data/packagename/files/ring to allow setting their permission for execution.
+- make /sdcard/minirnote/ path as a working directory, and put prepared ringlibs dir there.
+- Setting LD_LIBRARY_PATH evironment variable before each run of ring inside android.
