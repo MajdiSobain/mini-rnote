@@ -288,6 +288,9 @@ ok
 					addseparator() 
 				next
 			}
+			if isAndroid()
+				this.tool1.seticonsize(new qsize(100,100))
+			ok
 			addToolBarBreak(4)  # 4 = Qt::TopToolBarArea
 			this.tool2 = addtoolbar("Edit")  {
 				for x = 8 to 14
@@ -295,6 +298,9 @@ ok
 					addseparator() 
 				next
 			}
+			if isAndroid()
+				this.tool2.seticonsize(new qsize(100,100))
+			ok
 			this.aBtns = aBtns
 
 /* ****

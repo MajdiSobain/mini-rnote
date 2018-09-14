@@ -7,10 +7,12 @@ To do list for mini rnote IDE for android
 - changing the rnote name in the window title and the file name
 - comment out RunTool and RunToolConsole funcs and other unused funcs
 - delete all/unNecessary commented code
-- make icons large
 - add ring bins folder to the project.qrc file
 - resize font of line numbers panel
+- add standard library and other libs
 - redesigning the interface for better look
+- redisign search window
+- 
 
 
 Main Problems that I faced:
@@ -24,6 +26,5 @@ Main Problems that I faced:
 
 Minor tweeks that need to be implemented:
 ----------------------------------
-- Put ring and its libraries in the /data/data/packagename/files/ring to allow setting their permission for execution.
 - make /sdcard/minirnote/ path as a working directory, and put prepared ringlibs dir there.
-- Setting LD_LIBRARY_PATH evironment variable before each run of ring inside android.
+
