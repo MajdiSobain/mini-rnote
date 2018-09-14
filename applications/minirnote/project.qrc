@@ -65,6 +65,10 @@
         <file>image/debug.png</file>
         <file>image/redo.png</file>
         <file>image/mainfile.png</file>
-        <file>ring</file>
+        <file>ring/ring</file>
+        <file>ring/libring.so</file>
+        <file>ring/libring_openssl.so</file>
+        <file>ring/libring_libcurl.so</file>
+        <file>ring/libringqt.so</file>
     </qresource>
 </RCC>

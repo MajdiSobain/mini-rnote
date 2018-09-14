@@ -1518,7 +1518,7 @@ ok
 					oDockOutputWindow { show() raise() }
 					oProcessEditbox.setplaintext("")
 					qfl = new qfile()
-					preperm = 4000 | 1000 | 400 | 100 | 40 | 10
+					preperm = 4000 | 2000 | 1000 | 400 | 200 | 100 | 40 | 20 | 10
 					oSP = new qStandardPaths
 					if oSP.locate(8, "ring", 1/*Directory*/) = NULL
 						oqDir = new qDir()
@@ -1526,9 +1526,13 @@ ok
 						qfl.copy_2(":/ring/ring", cCurrentDir + "/ring/ring")
 						qfl.setPermissions(cCurrentDir + "/ring/ring", preperm)
 						qfl.copy_2(":/ring/libring.so", cCurrentDir + "/ring/libring.so")
+						qfl.setPermissions(cCurrentDir + "/ring/libring.so", preperm)
 						qfl.copy_2(":/ring/libring_openssl.so", cCurrentDir + "/ring/libring_openssl.so")
+						qfl.setPermissions(cCurrentDir + "/ring/libring_openssl.so", preperm)
 						qfl.copy_2(":/ring/libring_libcurl.so", cCurrentDir + "/ring/libring_libcurl.so")
+						qfl.setPermissions(cCurrentDir + "/ring/libring_libcurl.so", preperm)
 						qfl.copy_2(":/ring/libringqt.so", cCurrentDir + "/ring/libringqt.so")
+						qfl.setPermissions(cCurrentDir + "/ring/libringqt.so", preperm)
 					ok
 
 					exefile = cCurrentDir + "/ring/ring"
@@ -2076,18 +2080,20 @@ ok
 				append(cPara)
 			next
 		}
-#		if isAndroid()
-#			oProcessEnv = new qProcessEnvironment() {
-#				environmentPaths = cCurrentDir + ":" + substr(cCurrentDir, "files", "lib")
-#				oProcessEnv.insert("LD_LIBRARY_PATH", environmentPaths)
-#			}
-#		ok
+		if isAndroid()
+			oProcessEnv = new qProcessEnvironment()
+			oProcessEnv = oProcessEnv.systemEnvironment()
+			oProcessEnv {
+				environmentPaths = this.cCurrentDir + "/ring:" + substr(this.cCurrentDir, "files", "lib")
+				oProcessEnv.insert("LD_LIBRARY_PATH", environmentPaths)
+			}
+		ok
 		oProcess = new qprocess(NULL) {
 			setprogram( cProgram)
 			setarguments(ostringlist)
-#			if isAndroid()
-#				setProcessEnvironment(oProcessEnv)
-#			ok
+			if isAndroid()
+				setProcessEnvironment(oProcessEnv)
+			ok
 			setreadyreadstandardoutputevent(cGetDataFunc)
 			start_3(  QIODevice_ReadWrite )
 		}
