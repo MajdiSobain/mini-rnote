@@ -5,7 +5,7 @@ Mini rNote application is a modification of the rNote application (Ring Language
 Till now this work is in progress and needs alot of time and effort to be ready and packaged for final use.
 
 
-![MinirNote](https://github.com/MajdiSobain/mini-rnote/blob/master/mini-rnote.png)
+![MinirNote1](https://github.com/MajdiSobain/mini-rnote/blob/master/Screenshot-1.jpg) ![MinirNote2](https://github.com/MajdiSobain/mini-rnote/blob/master/Screenshot-2.jpg) ![MinirNote3](https://github.com/MajdiSobain/mini-rnote/blob/master/Screenshot-3.jpg)
 
 
 
