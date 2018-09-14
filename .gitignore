@@ -1,0 +1,12 @@
+image/
+project.qrc
+ring/
+rnote
+rnote.c
+rnote.ring
+rnote.ringo
+rnote_buildclang.sh
+rnote_buildgcc.sh
+rnote_buildvc.bat
+target/
+
